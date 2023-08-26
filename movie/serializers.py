@@ -1,20 +1,20 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from product.models import Category, Product, Review, Tag
+from product.models import Director, Review, Movie
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class MovieSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
+        model = Movie
         fields = '__all__'
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    product_count = ProductSerializer
+class DirectorSerializer(serializers.ModelSerializer):
+    product_count = MovieSerializer
 
     class Meta:
-        model = Category
+        model = Director
         fields = 'name product_count'.split()
         # fields = '__all__'
 
@@ -26,19 +26,19 @@ class ReviewSerializer(serializers.ModelSerializer):
         # fields = '__all__'
 
 
-class ProductsReviewsSerializer(serializers.ModelSerializer):
+class MovieReviewsSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True)
 
     class Meta:
-        model = Product
+        model = Movie
         fields = 'title reviews rating'.split()
 
 
-class CategoryValidateSerializer(serializers.Serializer):
+class DirectorValidateSerializer(serializers.Serializer):
     name = serializers.CharField()
 
 
-class ProductValidateSerializer(serializers.Serializer):
+class MovieValidateSerializer(serializers.Serializer):
     title = serializers.CharField()
     description = serializers.CharField()
     price = serializers.IntegerField()

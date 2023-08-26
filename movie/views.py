@@ -1,26 +1,25 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from product.models import Category, Product, Review
-from product.serializers import (CategorySerializer, ProductSerializer, ReviewSerializer,
-                                 ProductsReviewsSerializer, CategoryValidateSerializer, ProductValidateSerializer,
-                                 ReviewValidateSerializer)
+from product.models import Movie, Director, Review
+from product.serializers import (DirectorSerializer,MovieSerializer, ReviewSerializer, ReviewValidateSerializer,
+                                 DirectorValidateSerializer, MovieValidateSerializer, MovieReviewsSerializer)
 
 
 @api_view(['GET', 'POST'])
 def category_api_view(request):
     if request.method == 'GET':
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        categories = Director.objects.all()
+        serializer = DirectorSerializer(categories, many=True)
         return Response(data=serializer.data)
 
     elif request.method == 'POST':
-        serializer = CategoryValidateSerializer(data=request.data)
+        serializer = DirectorValidateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data=serializer.errors)
         data = serializer.validated_data
-        category = Category.objects.create(
+        category = Director.objects.create(
             name=data.get('name')
         )
         return Response(data=CategorySerializer(category, many=False).data, status=status.HTTP_201_CREATED)
@@ -29,8 +28,8 @@ def category_api_view(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def category_detail_api_view(request, **kwargs):
     try:
-        category = Category.objects.get(id=kwargs['id'])
-    except Category.DoesNotExist:
+        category = Director.objects.get(id=kwargs['id'])
+    except Director.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND,
                         data="ERROR! Такой страницы не существует")
 
@@ -39,7 +38,7 @@ def category_detail_api_view(request, **kwargs):
         return Response(data=serializer.data)
 
     elif request.method == 'PUT':
-        serializer = CategoryValidateSerializer(data=request.data)
+        serializer = DirectorValidateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data=serializer.errors)
@@ -56,40 +55,40 @@ def category_detail_api_view(request, **kwargs):
 @api_view(['GET', 'POST'])
 def products_api_view(request):
     if request.method == 'GET':
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
+        products = Movie.objects.all()
+        serializer = MovieSerializer(products, many=True)
         return Response(data=serializer.data)
 
     elif request.method == 'POST':
-        serializer = ProductValidateSerializer(data=request.data)
+        serializer = MovieValidateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data=serializer.errors)
         data = serializer.validated_data
-        product = Product.objects.create(
+        product = Movie.objects.create(
             title=data.get('title'),
             description=data.get('description'),
             price=data.get('price'),
             category_id=data.get('category_id'),
             tag=data.get('tag')
         )
-        return Response(data=ProductSerializer(product, many=False).data, status=status.HTTP_201_CREATED)
+        return Response(data=MovieSerializer(product, many=False).data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def product_detail_api_view(request, **kwargs):
     try:
-        product = Product.objects.get(id=kwargs['id'])
-    except Product.DoesNotExist:
+        product = Movie.objects.get(id=kwargs['id'])
+    except Movie.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND,
                         data="ERROR! Такой страницы не существует")
 
     if request.method == 'GET':
-        serializer = ProductSerializer(product)
+        serializer = MovieSerializer(product)
         return Response(data=serializer.data)
 
     elif request.method == 'PUT':
-        serializer = ProductValidateSerializer(data=request.data)
+        serializer = MovieValidateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data=serializer.errors)
@@ -100,7 +99,7 @@ def product_detail_api_view(request, **kwargs):
         product.category_id = data.get('category_id')
         product.tag = data.get('tag')
         product.save()
-        return Response(data=ProductSerializer(product).data, status=status.HTTP_200_OK)
+        return Response(data=MovieSerializer(product).data, status=status.HTTP_200_OK)
 
     elif request.method == 'DELETE':
         product.delete()
@@ -159,6 +158,6 @@ def review_detail_api_view(request, **kwargs):
 
 @api_view(['GET'])
 def products_reviews_api_view(request):
-    products = Product.objects.all()
-    serializer = ProductsReviewsSerializer(products, many=True)
+    products = Movie.objects.all()
+    serializer = MovieReviewsSerializer(products, many=True)
     return Response(data=serializer.data)

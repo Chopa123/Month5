@@ -1,31 +1,23 @@
 from django.db import models
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
-class Category(models.Model):
+class Director(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self):
         return self.name
 
     @property
-    def product_count(self):
-        return self.product_set.count()
+    def director_count(self):
+        return self.director_set.count()
 
 
-class Product(models.Model):
+class Movie(models.Model):
     title = models.CharField(max_length=256)
     description = models.TextField(max_length=300)
-    price = models.IntegerField(default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+    duration = models.IntegerField()
+    director = models.ForeignKey(Director, on_delete=models.CASCADE,
                                  null=True)
-    tag = models.ManyToManyField(Tag, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -50,7 +42,7 @@ STAR_CHOICES = (
 
 class Review(models.Model):
     text = models.TextField(max_length=310)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+    product = models.ForeignKey(Movie, on_delete=models.CASCADE,
                                 related_name='reviews')
     stars = models.IntegerField(default=0, choices=STAR_CHOICES)
 
