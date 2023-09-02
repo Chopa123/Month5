@@ -6,6 +6,8 @@ from movie.serializers import (DirectorSerializer, MovieSerializer, ReviewSerial
                                DirectorValidateSerializer, MovieValidateSerializer, MovieReviewsSerializer)
 
 
+
+
 @api_view(['GET', 'POST'])
 def director_api_view(request):
     print(request.user)
