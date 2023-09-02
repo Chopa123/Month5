@@ -1,5 +1,5 @@
 """
-ASGI config for Shop_Api project.
+ASGI config for Afisha project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Shop_Api.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Afisha.settings')
 
 application = get_asgi_application()
